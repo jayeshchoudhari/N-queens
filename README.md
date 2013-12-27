@@ -5,7 +5,7 @@ This work shows a demo of N-queens problem, which is an example of Backtracking 
 
 Problem Statement
 -----------------
-Given an N x N chess board, place N queens such that they do not attack each other.
+Given a N x N chess board, place N queens such that they do not attack each other.
 
 This work implements the backtracking algorithm using javascript.
 The solutions for the particluar value of N can be seen on the chess board, displayed after every 3 seconds.
