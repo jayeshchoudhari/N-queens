@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.cell{
+			min-width: 100px;
+			min-height: 100px;
+			max-height: 100px;
+			max-width: 100px;
+			display: inline-block;
+			font-size: 60px;
+			color: red;
+			text-align: center;
+			float: left; 
+			line-height: 100px;
+		}
+		
+		.blackCell{
+			background-color:black; 
+		}
+
+		.whiteCell{
+			background-color:white; 
+		}
+
+		.row{
+			max-width:800px; 
+			max-height:100px;
+			min-height:100px;
+			min-width:100px;
+		}
+		#chessBoard{
+			max-width:800px; 
+			max-height:800px; 
+			min-width:800px; 
+			min-height:800px; 
+			border: 1px solid red;
+			margin: 0 auto;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="chessBoard"></div>
+
+	<script>
+		var solution = [];
+		$(document).ready(function(){
+
+			var parentDiv = $('#chessBoard');
+			for(var i = 0; i < 8; i++) {
+
+		        $('#chessBoard').append('<div class="row" id= "row' + i +'"></div>' );
+		        
+		        var row = "#row" + i;
+		        
+		        if(i % 2 == 0){
+			        for(var j = 0; j < 8; j++) {
+			        	if(j % 2 == 0)
+			            	$(row).append('<div id="cell' + j + '" class="cell whiteCell"></div>' );
+			            else
+			            	$(row).append('<div id="cell' + j + '" class="cell blackCell"></div>' );	
+			        }	
+		        }
+		        else{
+			        for(var j = 0; j < 8; j++) {
+			            if(j % 2 == 0)
+			            	$(row).append('<div id="cell' + j + '" class="cell blackCell"></div>' );
+			            else
+			            	$(row).append('<div id="cell' + j + '" class="cell whiteCell"></div>' );	
+			        }	
+		    	}
+
+		    }
+
+			
+			var sol = [];
+		    
+		    var x = new Array(8);
+			//x[k] = p: denotes in 'k'th row 'p'th col is occupied by a queen
+			var t = 0;
+			
+			function place(k, l)
+			{
+				var j;
+				for(j = 0; j < k; j++)			//x[j] is filled for all j < k
+				{
+					if((x[j] == l) || (Math.abs(j-k) == Math.abs(x[j]-l))) //checks for same column and diagonal
+						return 0;
+				}
+				return 1;
+			}
+			
+			var nqueens = function(k,n){
+				var i;
+				for(i = 0; i < n; i++){
+					if(place(k, i) == 1){
+						x[k] = i;				//place a queen in 'k'th row at 'i'th column  
+						if(k == (n-1)){			//checks if all the queens are placed
+							console.log(x);
+							var cd = [];
+							for(var z = 0; z < 8; z++)
+								cd[z] = x[z];
+							aggregate(cd);
+							t++;
+						}
+						else{
+							arguments.callee(k+1, n);		//recursion
+						}	
+					}
+				}
+			}
+			
+			nqueens(0, 8);
+			function aggregate(md){
+				sol.push(md);
+			}
+			console.log(sol);
+
+
+			var p = 0;
+			setInterval(function(){
+
+				for(var u = 0; u < 8; u++){
+					var rowClear = "#row" + u;
+					for(var v = 0; v< 8; v++){
+						var cellClear = "#cell" + v;
+						$(rowClear).find(cellClear).html('');	
+					}
+				}
+				for(var b = 0; b < 8; b++){
+					var rowFill = "#row" + b;
+					var cellFill = "#cell" + sol[p][b];
+
+					$(rowFill).find(cellFill).html('Q');
+					//console.log(rowFill + " " + cellFill);
+					
+				}
+				p++;
+				if(p > 90)	p = 0;
+			},3000);
+
+		});
+
+		
+	</script>
+
+
+</body>
+</html>
